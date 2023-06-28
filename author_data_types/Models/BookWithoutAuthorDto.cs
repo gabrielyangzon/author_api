@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace author_data_types.Models
 {
-    public class Book
+    public class BookWithoutAuthorDto
     {
-        public Guid Id { get; set; }
-        public int AuthorId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
-
     }
-
 }
