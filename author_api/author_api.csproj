@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\author_data_access\author_data_access.csproj" />
     <ProjectReference Include="..\author_data_types\author_data_types.csproj" />
+    <ProjectReference Include="..\author_services\author_services.csproj" />
   </ItemGroup>
 
 </Project>

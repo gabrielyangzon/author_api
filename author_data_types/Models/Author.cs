@@ -13,7 +13,7 @@ namespace author_data_types.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<Book> Books { get; set; }
+        public List<Book> Books { get; set; } = new List<Book>();
     }
 
     public class AuthorCreateDto
@@ -23,4 +23,15 @@ namespace author_data_types.Models
         public string LastName { get; set; }
 
     }
+
+
+    public class AuthorEditDto
+    {
+        [Key]
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+
+
 }

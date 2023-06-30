@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\author_data_access\author_data_access.csproj" />
+    <ProjectReference Include="..\author_data_types\author_data_types.csproj" />
+  </ItemGroup>
+
+</Project>

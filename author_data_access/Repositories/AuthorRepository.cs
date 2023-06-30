@@ -11,12 +11,13 @@ namespace author_data_access.Repositories
 
     public interface IAuthorRepository
     {
-        public List<Author> GetAuthors();
-        public List<Author> GetAuthorsWithBooks();
+        public Task<List<Author>> GetAuthors();
+        public Task<List<Author>> GetAuthorsWithBooks();
+        public Task<Author> GetAuthorById(int id);
+        public Task<Author> AddAuthor(Author author);
+        public Task<Author> EditAuthor(AuthorEditDto author);
 
-        public Author AddAuthor(AuthorCreateDto author);
-
-        public Author GetAuthorById(int id);
+        public Task<bool> DeleteAuthor(int id);
     }
 
     public class AuthorRepository : IAuthorRepository
@@ -30,7 +31,7 @@ namespace author_data_access.Repositories
                 {
                 new Author
                 {
-                    Id = 1,
+
                     FirstName ="Joydip",
                     LastName ="Kanjilal",
                        Books = new List<Book>()
@@ -42,7 +43,7 @@ namespace author_data_access.Repositories
                 },
                 new Author
                 {
-                     Id = 2,
+
                     FirstName ="Yashavanth",
                     LastName ="Kanetkar",
                     Books = new List<Book>()
@@ -59,58 +60,97 @@ namespace author_data_access.Repositories
         }
 
 
-        public List<Author> GetAuthors()
+        public async Task<List<Author>> GetAuthors()
         {
             using (var context = new AuthorContext())
             {
-                var authorList = context.Authors.ToList();
+                var authorList = await context.Authors.ToListAsync();
                 return authorList;
             }
 
         }
 
-        public List<Author> GetAuthorsWithBooks()
+        public async Task<List<Author>> GetAuthorsWithBooks()
         {
             using (var context = new AuthorContext())
             {
-                var authorList = context.Authors.Include(a => a.Books).ToList();
+                var authorList = await context.Authors.Include(a => a.Books).ToListAsync();
                 return authorList;
             }
 
         }
 
 
-        public Author GetAuthorById(int id)
+        public async Task<Author> GetAuthorById(int id)
         {
             using (var context = new AuthorContext())
             {
-                var author = context.Authors.FirstOrDefault(author => author.Id == id);
+                var author = await context.Authors.FirstOrDefaultAsync(author => author.Id == id);
 
                 return author;
             }
         }
 
 
-        public Author AddAuthor(AuthorCreateDto author)
+        public async Task<Author> AddAuthor(Author author)
         {
 
             using (var context = new AuthorContext())
             {
-                Author addAuthor = new Author() { FirstName = author.FirstName, LastName = author.LastName };
-                var newAuthor = context.Authors.Add(addAuthor);
 
-                context.SaveChanges();
+                var newAuthor = context.Authors.Add(author);
+
+                await context.SaveChangesAsync();
 
                 return newAuthor.Entity;
             }
 
-
-
-
-
         }
 
 
+        public async Task<Author> EditAuthor(AuthorEditDto authorModified)
+        {
+            using (var context = new AuthorContext())
+            {
 
+                Author author = new Author()
+                {
+                    Id = authorModified.Id,
+                    FirstName = authorModified.FirstName,
+                    LastName = authorModified.LastName
+                };
+
+
+                var result = context.Entry(author).State = EntityState.Modified;
+
+                try
+                {
+                    await context.SaveChangesAsync();
+
+                    return author;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public async Task<bool> DeleteAuthor(int id)
+        {
+            using (var context = new AuthorContext())
+            {
+                var author = context.Authors.FirstOrDefault(author => author.Id == id);
+
+                if (author != null)
+                {
+                    context.Authors.Remove(author);
+                    await context.SaveChangesAsync();
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
