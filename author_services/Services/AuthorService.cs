@@ -42,5 +42,16 @@ namespace author_services.Services
         {
             return await _authorRepository.AddAuthor(author);
         }
+
+        public async Task<Author> EditAuthor(Author author)
+        {
+            return await _authorRepository.EditAuthor(author);
+        }
+
+
+        public async Task<bool> DeleteAuthor(int id)
+        {
+            return await _authorRepository.DeleteAuthor(id);
+        }
     }
 }

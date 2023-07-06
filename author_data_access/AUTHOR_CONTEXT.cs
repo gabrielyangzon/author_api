@@ -8,7 +8,8 @@ namespace author_data_access
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase(databaseName: "AuthorDB") ;
+            //optionsBuilder.UseInMemoryDatabase(databaseName: "AuthorDB") ;
+            optionsBuilder.UseSqlite(@"Data Source=Bookstore.db");
         }
 
         public DbSet<Author> Authors { get; set; }

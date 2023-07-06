@@ -15,7 +15,7 @@ namespace author_data_access.Repositories
         public Task<List<Author>> GetAuthorsWithBooks();
         public Task<Author> GetAuthorById(int id);
         public Task<Author> AddAuthor(Author author);
-        public Task<Author> EditAuthor(AuthorEditDto author);
+        public Task<Author> EditAuthor(Author author);
 
         public Task<bool> DeleteAuthor(int id);
     }
@@ -25,38 +25,7 @@ namespace author_data_access.Repositories
 
         public AuthorRepository()
         {
-            using (var context = new AuthorContext())
-            {
-                var authors = new List<Author>
-                {
-                new Author
-                {
 
-                    FirstName ="Joydip",
-                    LastName ="Kanjilal",
-                       Books = new List<Book>()
-                    {
-                        new Book { Id = Guid.NewGuid(), AuthorId = 1, Title = "Mastering C# 8.0"},
-                        new Book { Id = Guid.NewGuid(), AuthorId = 1,Title = "Entity Framework Tutorial"},
-                        new Book { Id = Guid.NewGuid(), AuthorId = 1,Title = "ASP.NET 4.0 Programming"}
-                    }
-                },
-                new Author
-                {
-
-                    FirstName ="Yashavanth",
-                    LastName ="Kanetkar",
-                    Books = new List<Book>()
-                    {
-                        new Book { Id = Guid.NewGuid(), AuthorId = 2, Title = "Let us C"},
-                        new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Let us C++"},
-                        new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Let us C#"}
-                    }
-                }
-                };
-                context.Authors.AddRange(authors);
-                context.SaveChanges();
-            }
         }
 
 
@@ -64,7 +33,7 @@ namespace author_data_access.Repositories
         {
             using (var context = new AuthorContext())
             {
-                var authorList = await context.Authors.ToListAsync();
+                var authorList = await context.Authors.AsNoTracking().ToListAsync();
                 return authorList;
             }
 
@@ -74,7 +43,7 @@ namespace author_data_access.Repositories
         {
             using (var context = new AuthorContext())
             {
-                var authorList = await context.Authors.Include(a => a.Books).ToListAsync();
+                var authorList = await context.Authors.AsNoTracking().Include(a => a.Books).ToListAsync();
                 return authorList;
             }
 
@@ -85,7 +54,7 @@ namespace author_data_access.Repositories
         {
             using (var context = new AuthorContext())
             {
-                var author = await context.Authors.FirstOrDefaultAsync(author => author.Id == id);
+                var author = await context.Authors.AsNoTracking().Include(a => a.Books).FirstOrDefaultAsync(author => author.Id == id);
 
                 return author;
             }
@@ -98,28 +67,27 @@ namespace author_data_access.Repositories
             using (var context = new AuthorContext())
             {
 
-                var newAuthor = context.Authors.Add(author);
+                await context.Authors.AddAsync(author);
 
                 await context.SaveChangesAsync();
 
-                return newAuthor.Entity;
+                return author;
             }
 
         }
 
 
-        public async Task<Author> EditAuthor(AuthorEditDto authorModified)
+        public async Task<Author> EditAuthor(Author author)
         {
             using (var context = new AuthorContext())
             {
+                var findAuthor = GetAuthorById(author.Id).Result;
 
-                Author author = new Author()
+                if (findAuthor != null)
                 {
-                    Id = authorModified.Id,
-                    FirstName = authorModified.FirstName,
-                    LastName = authorModified.LastName
-                };
+                    author.Books = findAuthor.Books;
 
+                }
 
                 var result = context.Entry(author).State = EntityState.Modified;
 

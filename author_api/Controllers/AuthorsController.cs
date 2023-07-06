@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using author_data_access;
 using author_data_types.Models;
-using author_data_access.Repositories;
+
 using author_services.Services;
+using AutoMapper;
 
 namespace author_api.Controllers
 {
@@ -17,19 +18,21 @@ namespace author_api.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly AuthorContext _context;
+        private readonly IMapper _mapper;
         readonly AuthorService _authorService;
 
 
-        public AuthorsController(IAuthorRepository authorRepository)
+
+        public AuthorsController(IMapper mapper)
         {
             _authorService = new AuthorService();
-
+            _mapper = mapper;
         }
 
 
         // GET: api/Authors
         [HttpGet]
-        [Route("Authors")]
+        [Route("GetAll")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Author>>> GetAuthors()
@@ -48,7 +51,7 @@ namespace author_api.Controllers
 
         // GET: api/AuthorsWithBooks
         [HttpGet]
-        [Route("AuthorsWithBooks")]
+        [Route("GetAllAuthorsWithBooks")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Author>>> GetAuthorsWithBooks()
@@ -83,29 +86,30 @@ namespace author_api.Controllers
 
 
         // PUT: api/Authors/5
-        //[HttpPut]
-        //[Route("EditAuthor")]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<IActionResult> PutAuthor([FromQuery] int id, [FromBody] AuthorEditDto author)
-        //{
-        //    if (id != author.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut]
+        [Route("EditAuthor")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> PutAuthor([FromQuery] int id, [FromBody] AuthorEditDto author)
+        {
+            if (id != author.Id)
+            {
+                return BadRequest();
+            }
+
+            var authorToBeModified = _mapper.Map<Author>(author);
+
+            var modifiedAuthor = await _authorService.EditAuthor(authorToBeModified);
+
+            if (modifiedAuthor == null)
+            {
+                return BadRequest();
+            }
 
 
-        //    var modifiedAuthor = await _authorRepository.EditAuthor(author);
 
-        //    if (modifiedAuthor == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-
-
-        //    return Ok(modifiedAuthor);
-        //}
+            return Ok(modifiedAuthor);
+        }
 
 
         // POST: api/Authors
@@ -114,8 +118,8 @@ namespace author_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Author>> PostAuthor([FromBody] AuthorCreateDto author)
         {
-            Author authorToBeAdded = new Author() { FirstName = author.FirstName, LastName = author.LastName };
 
+            var authorToBeAdded = _mapper.Map<Author>(author);
 
             var newAuthor = _authorService.AddAuthor(authorToBeAdded);
             return Ok(newAuthor);
@@ -123,28 +127,28 @@ namespace author_api.Controllers
 
 
         // DELETE: api/Authors/5
-        //[HttpDelete]
-        //[Route("DeleteAuthor")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<IActionResult> DeleteAuthor([FromQuery] int id)
-        //{
-        //    var authorToDelete = _authorRepository.GetAuthorById(id);
+        [HttpDelete]
+        [Route("DeleteAuthor")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAuthor([FromQuery] int id)
+        {
+            var authorToDelete = _authorService.GetAuthorById(id);
 
-        //    if (authorToDelete == null)
-        //    {
-        //        return NotFound("Author not found");
-        //    }
+            if (authorToDelete == null)
+            {
+                return NotFound("Author not found");
+            }
 
-        //    bool isDeleted = await _authorRepository.DeleteAuthor(id);
+            bool isDeleted = await _authorService.DeleteAuthor(id);
 
-        //    if (isDeleted)
-        //    {
-        //        return Ok("Author deleted");
-        //    }
+            if (isDeleted)
+            {
+                return Ok("Author deleted");
+            }
 
-        //    return BadRequest();
-        //}
+            return BadRequest();
+        }
     }
 }
