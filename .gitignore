@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/author_api/Bookstore.db
+/author_api/Bookstore.db-shm
+/author_api/Bookstore.db-wal
