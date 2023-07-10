@@ -26,12 +26,13 @@ namespace author_api.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("", builder => {
+                options.AddPolicy("Cors", builder =>
+                {
 
                     builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod();
-                    
+
                 });
             });
         }
