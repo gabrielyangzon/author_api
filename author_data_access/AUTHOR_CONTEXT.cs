@@ -6,9 +6,12 @@ namespace author_data_access
     public class AuthorContext : DbContext
     {
 
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "AuthorDB") ;
+
             optionsBuilder.UseSqlite(@"Data Source=Bookstore.db");
         }
 
@@ -16,4 +19,7 @@ namespace author_data_access
         public DbSet<Book> Books { get; set; }
 
     }
+
+
+
 }

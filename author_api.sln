@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "author_data_access", "autho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "author_data_types", "author_data_types\author_data_types.csproj", "{FE7AC993-1EBF-42FB-8112-70869A633567}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "author_services", "author_services\author_services.csproj", "{8DCD6648-DA1C-4847-9DD2-7E221D854A74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "author_services", "author_services\author_services.csproj", "{8DCD6648-DA1C-4847-9DD2-7E221D854A74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "author_testing", "author_testing\author_testing.csproj", "{8EAE8CB4-818F-4670-9419-5B4F51B01D6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8DCD6648-DA1C-4847-9DD2-7E221D854A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DCD6648-DA1C-4847-9DD2-7E221D854A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DCD6648-DA1C-4847-9DD2-7E221D854A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EAE8CB4-818F-4670-9419-5B4F51B01D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EAE8CB4-818F-4670-9419-5B4F51B01D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EAE8CB4-818F-4670-9419-5B4F51B01D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EAE8CB4-818F-4670-9419-5B4F51B01D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

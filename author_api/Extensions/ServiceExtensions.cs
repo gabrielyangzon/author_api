@@ -7,7 +7,10 @@ namespace author_api.Extensions
     public static class ServiceExtensions
     {
 
-        public static void ConfigureDb(this IServiceCollection services) => services.AddDbContext<AuthorContext>();
+        public static void ConfigureDb(this IServiceCollection services)
+        {
+            services.AddDbContext<AuthorContext>();
+        }
 
         public static void ConfigureLogging(this IServiceCollection services)
         {

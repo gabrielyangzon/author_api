@@ -22,101 +22,95 @@ namespace author_data_access.Repositories
 
     public class AuthorRepository : IAuthorRepository
     {
-
-        public AuthorRepository()
+        private readonly AuthorContext _context;
+        public AuthorRepository(AuthorContext context)
         {
-
+            _context = context;
         }
 
 
         public async Task<List<Author>> GetAuthors()
         {
-            using (var context = new AuthorContext())
-            {
-                var authorList = await context.Authors.AsNoTracking().ToListAsync();
-                return authorList;
-            }
+
+            var authorList = await _context.Authors.AsNoTracking().ToListAsync();
+            return authorList;
+
 
         }
 
         public async Task<List<Author>> GetAuthorsWithBooks()
         {
-            using (var context = new AuthorContext())
-            {
-                var authorList = await context.Authors.AsNoTracking().Include(a => a.Books).ToListAsync();
-                return authorList;
-            }
+
+            var authorList = await _context.Authors.AsNoTracking().Include(a => a.Books).ToListAsync();
+            return authorList;
+
 
         }
 
 
         public async Task<Author> GetAuthorById(int id)
         {
-            using (var context = new AuthorContext())
-            {
-                var author = await context.Authors.AsNoTracking().Include(a => a.Books).FirstOrDefaultAsync(author => author.Id == id);
 
-                return author;
-            }
+            var author = await _context.Authors.AsNoTracking().Include(a => a.Books).FirstOrDefaultAsync(author => author.Id == id);
+
+            return author;
+
         }
 
 
         public async Task<Author> AddAuthor(Author author)
         {
 
-            using (var context = new AuthorContext())
-            {
 
-                await context.Authors.AddAsync(author);
 
-                await context.SaveChangesAsync();
+            await _context.Authors.AddAsync(author);
 
-                return author;
-            }
+            await _context.SaveChangesAsync();
+
+            return author;
+
 
         }
 
 
         public async Task<Author> EditAuthor(Author author)
         {
-            using (var context = new AuthorContext())
+
+            var findAuthor = GetAuthorById(author.Id).Result;
+
+            if (findAuthor != null)
             {
-                var findAuthor = GetAuthorById(author.Id).Result;
+                author.Books = findAuthor.Books;
 
-                if (findAuthor != null)
-                {
-                    author.Books = findAuthor.Books;
-
-                }
-
-                var result = context.Entry(author).State = EntityState.Modified;
-
-                try
-                {
-                    await context.SaveChangesAsync();
-
-                    return author;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
             }
+
+            var result = _context.Entry(author).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+
+                return author;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
 
         public async Task<bool> DeleteAuthor(int id)
         {
-            using (var context = new AuthorContext())
-            {
-                var author = context.Authors.FirstOrDefault(author => author.Id == id);
 
-                if (author != null)
-                {
-                    context.Authors.Remove(author);
-                    await context.SaveChangesAsync();
-                    return true;
-                }
+            var author = _context.Authors.FirstOrDefault(author => author.Id == id);
+
+            if (author != null)
+            {
+                _context.Authors.Remove(author);
+                await _context.SaveChangesAsync();
+                return true;
             }
+
 
             return false;
         }

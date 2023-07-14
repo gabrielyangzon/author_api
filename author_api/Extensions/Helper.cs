@@ -1,5 +1,6 @@
 ﻿using author_data_access;
 using author_data_types.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace author_api.Extensions
 {
@@ -26,11 +27,8 @@ namespace author_api.Extensions
         }
 
 
-        private static void Initialize(AuthorContext context)
+        public static void Initialize(AuthorContext context)
         {
-
-            context.Database.EnsureCreated();
-
             if (context.Authors.Any())
             {
                 return;
@@ -67,5 +65,7 @@ namespace author_api.Extensions
             context.SaveChanges();
 
         }
+
+
     }
 }

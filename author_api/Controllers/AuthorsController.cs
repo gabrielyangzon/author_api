@@ -23,9 +23,9 @@ namespace author_api.Controllers
 
 
 
-        public AuthorsController(IMapper mapper)
+        public AuthorsController(IMapper mapper, AuthorContext context)
         {
-            _authorService = new AuthorService();
+            _authorService = new AuthorService(context);
             _mapper = mapper;
         }
 
@@ -34,8 +34,8 @@ namespace author_api.Controllers
         [HttpGet]
         [Route("GetAll")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Author>>> GetAuthors()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Author>))]
+        public async Task<ActionResult> GetAuthors()
         {
             var authors = await _authorService.GetAllAuthors();
 
@@ -68,11 +68,11 @@ namespace author_api.Controllers
 
 
         // GET: api/Authors/5
-        [HttpGet]
-        [Route("GetAuthorById")]
+        [HttpGet("{id}")]
+
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Author>> GetAuthorById([FromQuery] int id)
+        public async Task<ActionResult<Author>> GetAuthorById(int id)
         {
             var author = await _authorService.GetAuthorById(id);
 
@@ -85,7 +85,7 @@ namespace author_api.Controllers
         }
 
 
-        // PUT: api/Authors/5
+
         [HttpPut]
         [Route("EditAuthor")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -112,7 +112,7 @@ namespace author_api.Controllers
         }
 
 
-        // POST: api/Authors
+
         [HttpPost]
         [Route("AddAuthor")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -121,18 +121,17 @@ namespace author_api.Controllers
 
             var authorToBeAdded = _mapper.Map<Author>(author);
 
-            var newAuthor = _authorService.AddAuthor(authorToBeAdded);
+            var newAuthor = await _authorService.AddAuthor(authorToBeAdded);
             return Ok(newAuthor);
         }
 
 
         // DELETE: api/Authors/5
-        [HttpDelete]
-        [Route("DeleteAuthor")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteAuthor([FromQuery] int id)
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
             var authorToDelete = _authorService.GetAuthorById(id);
 

@@ -14,10 +14,10 @@ namespace author_services.Services
     {
         readonly IAuthorRepository _authorRepository;
 
-        public AuthorService()
+        public AuthorService(AuthorContext context)
         {
 
-            _authorRepository = new AuthorRepository();
+            _authorRepository = new AuthorRepository(context);
 
         }
 

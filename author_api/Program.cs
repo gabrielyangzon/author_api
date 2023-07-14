@@ -16,7 +16,7 @@ builder.Services.AddAutoMapper(typeof(AutomapperProfile));
 
 builder.Services.ConfigureDb();
 builder.Services.ConfigureCors();
-
+//builder.Services
 
 var app = builder.Build();
 
