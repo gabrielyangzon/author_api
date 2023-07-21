@@ -43,6 +43,18 @@ namespace author_testing
                                 new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Let us C++"},
                                 new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Let us C#"}
                             }
+                        },
+                        new Author
+                        {
+
+                            FirstName ="Test1",
+                            LastName ="Test1",
+                            Books = new List<Book>()
+                            {
+                                new Book { Id = Guid.NewGuid(), AuthorId = 2, Title = "Test book1"},
+                                new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Test book2"},
+                                new Book { Id = Guid.NewGuid(), AuthorId = 2,Title = "Test book3"}
+                            }
                         }
                     };
 

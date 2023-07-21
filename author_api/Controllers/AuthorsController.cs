@@ -34,7 +34,7 @@ namespace author_api.Controllers
         [HttpGet]
         [Route("GetAll")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Author>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AuthorOnlyResponse>))]
         public async Task<ActionResult> GetAuthors()
         {
             var authors = await _authorService.GetAllAuthors();
@@ -45,7 +45,11 @@ namespace author_api.Controllers
             }
 
 
-            return Ok(authors);
+            var authorResponse = _mapper.Map<List<AuthorOnlyResponse>>(authors);
+
+
+
+            return Ok(authorResponse);
         }
 
 
@@ -53,8 +57,8 @@ namespace author_api.Controllers
         [HttpGet]
         [Route("GetAllAuthorsWithBooks")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Author>>> GetAuthorsWithBooks()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Author))]
+        public async Task<ActionResult> GetAuthorsWithBooks()
         {
             var authors = await _authorService.GetAllAuthorsWithBooks();
 
@@ -71,8 +75,8 @@ namespace author_api.Controllers
         [HttpGet("{id}")]
 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Author>> GetAuthorById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Author))]
+        public async Task<ActionResult> GetAuthorById(int id)
         {
             var author = await _authorService.GetAuthorById(id);
 
@@ -115,8 +119,8 @@ namespace author_api.Controllers
 
         [HttpPost]
         [Route("AddAuthor")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Author>> PostAuthor([FromBody] AuthorCreateDto author)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Author))]
+        public async Task<ActionResult> PostAuthor([FromBody] AuthorCreateDto author)
         {
 
             var authorToBeAdded = _mapper.Map<Author>(author);

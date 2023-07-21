@@ -23,6 +23,7 @@ namespace author_data_access.Repositories
     public class AuthorRepository : IAuthorRepository
     {
         private readonly AuthorContext _context;
+
         public AuthorRepository(AuthorContext context)
         {
             _context = context;
@@ -33,6 +34,8 @@ namespace author_data_access.Repositories
         {
 
             var authorList = await _context.Authors.AsNoTracking().ToListAsync();
+
+
             return authorList;
 
 

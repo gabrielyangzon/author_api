@@ -16,6 +16,14 @@ namespace author_data_types.Models
         public List<Book> Books { get; set; } = new List<Book>();
     }
 
+    public class AuthorOnlyResponse
+    {
+        [Key]
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+
     public class AuthorCreateDto
     {
 
