@@ -5,14 +5,24 @@ namespace author_data_access
 {
     public class AuthorContext : DbContext
     {
+        private bool forTest = false;
+        public AuthorContext(bool forTest=false)
+        {
 
+            this.forTest = forTest;
 
-
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
-            optionsBuilder.UseSqlite(@"Data Source=Bookstore.db");
+            if (forTest)
+            {
+                optionsBuilder.UseInMemoryDatabase("Bookstore");
+            }
+            else
+            {
+                optionsBuilder.UseSqlite(@"Data Source=Bookstore.db");
+            }
         }
 
         public DbSet<Author> Authors { get; set; }

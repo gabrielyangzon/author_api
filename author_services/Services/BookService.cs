@@ -21,13 +21,27 @@ namespace author_services.Services
 
         public async Task<List<Book>> GetAllBooksByAuthorId(int id)
         {
-            return await _bookRepository.GetAllBooksByAuthorId(id);
+            List<Book> booksByAuthor = await _bookRepository.GetAllBooksByAuthorId(id);
+            return booksByAuthor;
         }
 
 
         public async Task<Book> AddBook(Book book)
         {
-            return await _bookRepository.AddBook(book);
+            Book addedBook = await _bookRepository.AddBook(book);
+            return addedBook;
+        }
+
+        public async Task<Book> UpdateBook(Book book)
+        {
+            Book updatedBook = await _bookRepository.UpdateBook(book);
+            return updatedBook;
+        }
+
+        public async Task<bool> DeleteBook(Guid id)
+        {
+            bool isDeleted = await _bookRepository.DeleteBook(id);
+            return isDeleted;
         }
 
 

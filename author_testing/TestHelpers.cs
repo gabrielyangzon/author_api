@@ -13,8 +13,8 @@ namespace author_testing
     {
         public static AuthorContext GetDatabaseContext()
         {
-            var databaseContext = new AuthorContext();
-
+            var databaseContext = new AuthorContext(true);
+          
             databaseContext.Database.EnsureDeleted();
             databaseContext.Database.EnsureCreated();
 

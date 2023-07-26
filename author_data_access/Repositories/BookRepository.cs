@@ -15,6 +15,8 @@ namespace author_data_access.Repositories
         public Task<Book> AddBook(Book book);
 
         public Task<Book> UpdateBook(Book book);
+
+        public Task<bool> DeleteBook(Guid id);
     }
 
 
@@ -60,10 +62,26 @@ namespace author_data_access.Repositories
 
         }
 
-        public void DeleteBook(Book book)
+        public async Task<bool> DeleteBook(Guid id)
         {
-            _context.Books.Remove(book);
-            _context.SaveChanges();
+            try
+            {
+                Book? bookToBeRemoved = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
+                if (bookToBeRemoved == null) return false;
+               
+                _context.Books.Remove(bookToBeRemoved);
+                await _context.SaveChangesAsync();
+                return true;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
         }
 
 
